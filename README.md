@@ -83,6 +83,53 @@ The application logs its output to `cron.log` in the project directory. You can 
 tail -f cron.log
 ```
 
+## Maintenance Commands
+
+### Updating Wake Schedule
+```bash
+# View current schedule
+pmset -g sched
+
+# Change wake time (e.g., to 7:55 AM)
+sudo pmset repeat wake MTWRFSU 7:55:00
+
+# Cancel wake schedule
+sudo pmset repeat cancel
+```
+
+### Updating Cron Job
+```bash
+# Edit cron jobs
+crontab -e
+
+# View current cron jobs
+crontab -l
+
+# Remove all cron jobs
+crontab -r
+```
+
+### Checking Logs
+```bash
+# View entire log file
+cat cron.log
+
+# View live updates to log
+tail -f cron.log
+
+# Clear log file
+> cron.log
+```
+
+### Git Repository
+```bash
+# Update repository URL (if needed)
+git remote set-url origin new_url_here
+
+# View current remote URL
+git remote -v
+```
+
 ## Credits
 
 - Cat facts provided by [Cat Facts API](https://catfact.ninja/)
