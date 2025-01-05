@@ -13,7 +13,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 public class DailyQuoteCommit {
     private static final String QUOTES_API_URL = "https://api.quotable.io/random";
-    private static final String REPO_PATH = "/path/to/your/repo"; // Update this with your repo path
+    private static final String REPO_PATH = "/Users/matthewbixby/Documents/Coding/IntelliJ IDEA/daily-quote-committer"; // Update this with your repo path
 
     public static void main(String[] args) {
         try {
