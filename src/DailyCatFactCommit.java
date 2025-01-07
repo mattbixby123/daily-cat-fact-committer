@@ -13,7 +13,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 public class DailyCatFactCommit {
     private static final String CAT_FACT_API_URL = "https://catfact.ninja/fact";
-    private static final String REPO_PATH = "/Users/matthewbixby/Documents/Coding/IntelliJ IDEA/daily-cat-fact-committer";
+    private static final String REPO_PATH = "/Users/matthewbixby/Public/IntelliJ-daily/daily-cat-fact-committer";
 
     public static void main(String[] args) {
         try {
