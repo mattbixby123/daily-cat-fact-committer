@@ -7,13 +7,13 @@ An automated Java application that fetches a random cat fact daily and commits i
 - Automatically fetches a random cat fact daily at 9:00 AM
 - Creates a markdown file with the fact and date
 - Automatically commits and pushes to the repository
-- Uses system wake scheduling to ensure reliable execution
+- Uses macOS launchd service for reliable scheduling
 
 ## Prerequisites
 
 - Java Development Kit (JDK)
 - Git installed and configured
-- macOS (for pmset scheduling)
+- macOS
 - Required Java libraries:
     - Jackson (JSON parsing)
 
@@ -49,76 +49,88 @@ daily-cat-fact-committer/
 
 ## Automation Setup
 
-The project uses cron and pmset for automated execution:
+The project uses launchd for automated execution:
 
-1. Set up cron job to run at 9:00 AM daily:
+1. Create a launch agent plist file:
    ```bash
-   crontab -e
-   # Add the following line:
-   0 9 * * * cd /Users/[username]/Documents/Coding/IntelliJ-IDEA/daily-cat-fact-committer && ./run.sh >> /Users/[username]/Documents/Coding/IntelliJ-IDEA/daily-cat-fact-committer/cron.log 2>&1
+   mkdir -p ~/Library/LaunchAgents
+   nano ~/Library/LaunchAgents/com.user.dailycatfact.plist
    ```
 
-2. Schedule system wake at 8:55 AM daily:
-   ```bash
-   sudo pmset repeat wake MTWRFSU 8:55:00
+2. Add the following content to the plist file (adjust paths as needed):
+   ```xml
+   <?xml version="1.0" encoding="UTF-8"?>
+   <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+   <plist version="1.0">
+   <dict>
+       <key>Label</key>
+       <string>com.user.dailycatfact</string>
+       <key>ProgramArguments</key>
+       <array>
+           <string>/bin/bash</string>
+           <string>/Users/[username]/Documents/Coding/IntelliJ-IDEA/daily-cat-fact-committer/run.sh</string>
+       </array>
+       <key>StartCalendarInterval</key>
+       <dict>
+           <key>Hour</key>
+           <integer>9</integer>
+           <key>Minute</key>
+           <integer>0</integer>
+       </dict>
+       <key>StandardOutPath</key>
+       <string>/Users/[username]/Documents/Coding/IntelliJ-IDEA/daily-cat-fact-committer/launch.log</string>
+       <key>StandardErrorPath</key>
+       <string>/Users/[username]/Documents/Coding/IntelliJ-IDEA/daily-cat-fact-committer/launch.log</string>
+   </dict>
+   </plist>
    ```
 
-3. Verify scheduled wake times:
+3. Load the launch agent:
    ```bash
-   pmset -g sched
+   launchctl load ~/Library/LaunchAgents/com.user.dailycatfact.plist
    ```
 
 ## System Requirements
 
-- macOS with power management capabilities
+- macOS
 - System must be:
-    - Plugged into power
-    - Not manually put to sleep or shut down
     - Internet-connected
+    - Not shut down (sleep is okay - launchd will wake the system)
 
 ## Logging
 
-The application logs its output to `cron.log` in the project directory. You can monitor the logs using:
+The application logs its output to `launch.log` in the project directory. You can monitor the logs using:
 ```bash
-tail -f cron.log
+tail -f launch.log
 ```
 
 ## Maintenance Commands
 
-### Updating Wake Schedule
+### Managing Launch Agent
 ```bash
-# View current schedule
-pmset -g sched
+# Load the launch agent
+launchctl load ~/Library/LaunchAgents/com.user.dailycatfact.plist
 
-# Change wake time (e.g., to 7:55 AM)
-sudo pmset repeat wake MTWRFSU 7:55:00
+# Unload the launch agent
+launchctl unload ~/Library/LaunchAgents/com.user.dailycatfact.plist
 
-# Cancel wake schedule
-sudo pmset repeat cancel
-```
+# Check if the launch agent is running
+launchctl list | grep dailycatfact
 
-### Updating Cron Job
-```bash
-# Edit cron jobs
-crontab -e
-
-# View current cron jobs
-crontab -l
-
-# Remove all cron jobs
-crontab -r
+# Start the job manually (for testing)
+launchctl start com.user.dailycatfact
 ```
 
 ### Checking Logs
 ```bash
 # View entire log file
-cat cron.log
+cat launch.log
 
 # View live updates to log
-tail -f cron.log
+tail -f launch.log
 
 # Clear log file
-> cron.log
+> launch.log
 ```
 
 ### Git Repository
