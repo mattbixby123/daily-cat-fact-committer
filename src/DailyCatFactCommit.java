@@ -27,7 +27,7 @@ public class DailyCatFactCommit {
 
             // Create the daily fact file
             String fileName = "daily_cat_fact_" + formattedDate + ".md";
-            String filePath = REPO_PATH + "/" + fileName;
+            String filePath = REPO_PATH + "/daily-facts/" + fileName;
 
             // Write content to file
             String fileContent = String.format("""
@@ -76,7 +76,7 @@ public class DailyCatFactCommit {
 
         // Execute Git commands
         executeCommand(pb, "git", "pull", "origin", "main");
-        executeCommand(pb, "git", "add", fileName);
+        executeCommand(pb, "git", "add", "daily-facts/" + fileName);
         executeCommand(pb, "git", "commit", "-m", "Added daily cat fact for " + date);
         executeCommand(pb, "git", "push", "origin", "main");
     }

@@ -4,7 +4,7 @@ An automated Java application that fetches a random cat fact daily and commits i
 
 ## Features
 
-- Automatically fetches a random cat fact daily at 9:00 AM
+- Automatically fetches a random cat fact daily (scheduled for 11:40am on my device)
 - Creates a markdown file with the fact and date
 - Automatically commits and pushes to the repository
 - Uses macOS launchd service for reliable scheduling
@@ -145,4 +145,4 @@ git remote -v
 ## Credits
 
 - Cat facts provided by [Cat Facts API](https://catfact.ninja/)
-- Built using Java and the Jackson library for JSON parsing
+- Built using Java and the Jackson library for JSON parsi
