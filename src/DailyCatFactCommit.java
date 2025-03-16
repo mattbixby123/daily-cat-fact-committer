@@ -55,39 +55,63 @@ public class DailyCatFactCommit {
     }
 
     private static String fetchDailyCatFact() throws IOException, InterruptedException {
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(CAT_FACT_API_URL))
-                .build();
+        // Try up to 3 times with increasing delay
+        for (int attempt = 1; attempt <= 3; attempt++) {
+            try {
+                HttpClient client = HttpClient.newHttpClient();
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(URI.create(CAT_FACT_API_URL))
+                        .build();
 
-        HttpResponse<String> response = client.send(request,
-                HttpResponse.BodyHandlers.ofString());
+                HttpResponse<String> response = client.send(request,
+                        HttpResponse.BodyHandlers.ofString());
 
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode root = mapper.readTree(response.body());
+                ObjectMapper mapper = new ObjectMapper();
+                JsonNode root = mapper.readTree(response.body());
 
-        return root.get("fact").asText();
-    }
-
-    private static void executeGitCommands(String fileName, String date) throws IOException, InterruptedException {
-        // Change to repository directory
-        ProcessBuilder pb = new ProcessBuilder();
-        pb.directory(new File(REPO_PATH));
-
-        // Execute Git commands
-        executeCommand(pb, "git", "pull", "origin", "main");
-        executeCommand(pb, "git", "add", "daily-facts/" + fileName);
-        executeCommand(pb, "git", "commit", "-m", "Added daily cat fact for " + date);
-        executeCommand(pb, "git", "push", "origin", "main");
+                return root.get("fact").asText();
+            } catch (Exception e) {
+                System.err.println("Attempt " + attempt + " failed: " + e.getMessage());
+                if (attempt < 3) {
+                    // Exponential backoff - wait longer between attempts
+                    Thread.sleep(1000 * attempt * attempt);
+                } else {
+                    // If all attempts fail, use a fallback fact
+                    return "Cats have five toes on their front paws and four on their back paws. (FALLBACK - API unavailable)";
+                }
+            }
+        }
+        // This line should never be reached due to the fallback above
+        return "Unable to fetch cat fact";
     }
 
     private static void executeCommand(ProcessBuilder pb, String... command) throws IOException, InterruptedException {
         pb.command(command);
         Process process = pb.start();
 
+        // Capture output and error
+        BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+
+        // Read the output
+        String outputLine;
+        StringBuilder output = new StringBuilder();
+        while ((outputLine = stdInput.readLine()) != null) {
+            output.append(outputLine).append("\n");
+        }
+
+        // Read any errors
+        String errorLine;
+        StringBuilder error = new StringBuilder();
+        while ((errorLine = stdError.readLine()) != null) {
+            error.append(errorLine).append("\n");
+        }
+
         // Wait for the command to complete and check exit value
         int exitCode = process.waitFor();
         if (exitCode != 0) {
+            System.err.println("Command output: " + output);
+            System.err.println("Command error: " + error);
             throw new IOException("Command failed with exit code: " + exitCode);
         }
     }
