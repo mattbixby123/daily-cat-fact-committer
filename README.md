@@ -104,23 +104,24 @@ The application logs its output to `launch.log` in the project directory. You ca
 tail -f launch.log
 ```
 
-## Maintenance Commands
+### Maintenance Commands / Managing Launch Agent
 
-### Managing Launch Agent
 ```bash
 # Unload the launch agent
-launchctl unload ~/Library/LaunchAgents/com.mattbixby.catfact.plist
+unload ~/Library/LaunchAgents/com.mattbixby.catfact.plist
+
 
 # Load the launch agent
 launchctl load -w ~/Library/LaunchAgents/com.mattbixby.catfact.plist
 
 # Check if the launch agent is running
 launchctl list | grep com.mattbixby.catfact
+```
 
-# If the plist is 'missing' try this command
+### If the plist is 'missing' try this command
+```bash
 ls -la ~/Library/LaunchAgents/ 
-
-````
+```
 ### the ~/Library folder is hidden by default in macOS. That's why you can access it via Terminal but don't see it in Finder.
 ### Here's how to access this hidden folder - In Finder:
 ###### Click on the "Go" menu in the Finder menu bar
