@@ -54,7 +54,7 @@ The project uses launchd for automated execution:
 1. Create a launch agent plist file:
    ```bash
    mkdir -p ~/Library/LaunchAgents
-   nano ~/Library/LaunchAgents/com.user.dailycatfact.plist
+   nano ~/Library/LaunchAgents/com.user.catfact.plist
    ```
 
 2. Add the following content to the plist file (adjust paths as needed):
@@ -87,7 +87,7 @@ The project uses launchd for automated execution:
 
 3. Load the launch agent:
    ```bash
-   launchctl load ~/Library/LaunchAgents/com.user.dailycatfact.plist
+   launchctl load ~/Library/LaunchAgents/com.user.catfact.plist
    ```
 
 ## System Requirements
@@ -108,20 +108,37 @@ tail -f launch.log
 
 ### Managing Launch Agent
 ```bash
-# Load the launch agent
-launchctl load ~/Library/LaunchAgents/com.user.dailycatfact.plist
-
 # Unload the launch agent
-launchctl unload ~/Library/LaunchAgents/com.user.dailycatfact.plist
+launchctl unload ~/Library/LaunchAgents/com.mattbixby.catfact.plist
+
+# Load the launch agent
+launchctl load -w ~/Library/LaunchAgents/com.mattbixby.catfact.plist
 
 # Check if the launch agent is running
-launchctl list | grep dailycatfact
+launchctl list | grep com.mattbixby.catfact
 
-# Start the job manually (for testing)
-launchctl start com.user.dailycatfact
-```
+# If the plist is 'missing' try this command
+ls -la ~/Library/LaunchAgents/ 
+
+````
+### the ~/Library folder is hidden by default in macOS. That's why you can access it via Terminal but don't see it in Finder.
+### Here's how to access this hidden folder - In Finder:
+###### Click on the "Go" menu in the Finder menu bar
+###### Hold down the Option (⌥) key, and you'll see "Library" appear in the dropdown menu
+###### Click on "Library" while still holding the Option key
+###### Navigate to the "LaunchAgents" folder inside
+### Alternatively, you can jump directly there:
+###### In Finder, press Command+Shift+G (⌘+⇧+G)
+###### Type ~/Library/LaunchAgents
+###### Click "Go"
+### Or make hidden files visible permanently:
+###### Open Terminal
+###### Run: defaults write com.apple.finder AppleShowAllFiles TRUE
+###### Then restart Finder: killall Finder
+
 
 ### Checking Logs
+
 ```bash
 # View entire log file
 cat launch.log
