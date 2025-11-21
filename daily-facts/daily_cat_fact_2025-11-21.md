@@ -1,0 +1,5 @@
+# Daily Cat Fact - 2025-11-21
+
+> While it is commonly thought that the ancient Egyptians were the first to domesticate cats, the oldest known pet cat was recently found in a 9,500-year-old grave on the Mediterranean island of Cyprus. This grave predates early Egyptian art depicting cats by 4,000 years or more.
+
+Generated automatically using the [Cat Facts API](https://catfact.ninja)
