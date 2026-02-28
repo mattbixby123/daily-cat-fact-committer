@@ -1,0 +1,5 @@
+# Daily Cat Fact - 2026-02-28
+
+> The chlorine in fresh tap water irritates sensitive parts of the cat's nose. Let tap water sit for 24 hours before giving it to a cat.
+
+Generated automatically using the [Cat Facts API](https://catfact.ninja)
