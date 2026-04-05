@@ -1,0 +1,5 @@
+# Daily Cat Fact - 2026-04-05
+
+> A cat's whiskers are thought to be a kind of radar, which helps a cat gauge the space it intends to walk through.
+
+Generated automatically using the [Cat Facts API](https://catfact.ninja)
