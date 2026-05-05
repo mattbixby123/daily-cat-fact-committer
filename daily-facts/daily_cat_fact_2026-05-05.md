@@ -1,0 +1,5 @@
+# Daily Cat Fact - 2026-05-05
+
+> The domestic cat is the only species able to hold its tail vertically while walking. You can also learn about your cat's present state of mind by observing the posture of his tail.
+
+Generated automatically using the [Cat Facts API](https://catfact.ninja)
